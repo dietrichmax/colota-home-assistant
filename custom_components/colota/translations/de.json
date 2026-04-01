@@ -1,0 +1,23 @@
+{
+  "config": {
+    "abort": {
+      "cloud_not_connected": "Cloud ist nicht verbunden.",
+      "reconfigure_successful": "Neukonfiguration war erfolgreich. Aktualisiere die Webhook-URL in der Colota-App:\n\n`{webhook_url}`\n\nWeitere Informationen unter {docs_url}.",
+      "single_instance_allowed": "Bereits konfiguriert. Nur eine einzige Konfiguration ist erlaubt.",
+      "webhook_not_internet_accessible": "Deine Home-Assistant-Instanz muss aus dem Internet erreichbar sein, um Webhook-Nachrichten zu empfangen."
+    },
+    "create_entry": {
+      "default": "Um Standortdaten von Colota an Home Assistant zu senden, setze den Endpunkt in der Colota-App (Einstellungen > API-Einstellungen) auf:\n\n`{webhook_url}`\n\nKeine Authentifizierung erforderlich. Wähle die Home-Assistant-Vorlage für die beste Erfahrung.\n\nWeitere Informationen unter {docs_url}."
+    },
+    "step": {
+      "reconfigure": {
+        "description": "Bist du sicher, dass du den Colota-Webhook neu konfigurieren willst?",
+        "title": "Colota-Webhook neu konfigurieren"
+      },
+      "user": {
+        "description": "Bist du sicher, dass du den Colota-Webhook einrichten willst?",
+        "title": "Colota-Webhook einrichten"
+      }
+    }
+  }
+}
