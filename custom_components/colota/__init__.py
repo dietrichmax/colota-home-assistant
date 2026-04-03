@@ -19,7 +19,7 @@ from homeassistant.const import (
     Platform,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import config_entry_flow, config_validation as cv
+from homeassistant.helpers import config_entry_flow, config_validation as cv, device_registry as dr
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 
 from .const import (
@@ -157,6 +157,13 @@ async def async_unload_entry(
     """Unload a config entry."""
     webhook.async_unregister(hass, entry.data[CONF_WEBHOOK_ID])
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+
+
+async def async_remove_config_entry_device(
+    hass: HomeAssistant, config_entry: ColotaConfigEntry, device_entry: dr.DeviceEntry
+) -> bool:
+    """Allow device removal from the UI."""
+    return True
 
 
 async_remove_entry = config_entry_flow.webhook_async_remove_entry
