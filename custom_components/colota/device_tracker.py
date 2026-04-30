@@ -38,7 +38,7 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up Colota device tracker from config entry."""
-    tracked = entry.runtime_data
+    tracked = entry.runtime_data["tracker"]
 
     @callback
     def _receive_data(

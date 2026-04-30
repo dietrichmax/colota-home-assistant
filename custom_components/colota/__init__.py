@@ -37,7 +37,7 @@ _LOGGER = logging.getLogger(__name__)
 
 type ColotaConfigEntry = ConfigEntry[dict[str, Any]]
 
-PLATFORMS = [Platform.DEVICE_TRACKER]
+PLATFORMS = [Platform.DEVICE_TRACKER, Platform.SENSOR, Platform.BINARY_SENSOR]
 
 TRACKER_UPDATE = f"{DOMAIN}_tracker_update"
 
@@ -143,7 +143,11 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ColotaConfigEntry
 ) -> bool:
     """Set up Colota from a config entry."""
-    entry.runtime_data = {}
+    entry.runtime_data = {
+        "tracker": {},
+        "battery": {},
+        "charging": {},
+    }
     webhook.async_register(
         hass, DOMAIN, "Colota", entry.data[CONF_WEBHOOK_ID], handle_webhook
     )

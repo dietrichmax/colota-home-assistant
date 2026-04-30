@@ -19,5 +19,17 @@
         "title": "Set up the Colota webhook"
       }
     }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {
+        "name": "Battery"
+      }
+    },
+    "binary_sensor": {
+      "charging": {
+        "name": "Charging"
+      }
+    }
   }
 }

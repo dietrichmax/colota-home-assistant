@@ -120,7 +120,7 @@ async def test_entity_removal_cleans_tracked(
     )
     await hass.async_block_till_done()
 
-    assert "removable" in setup_integration.runtime_data
+    assert "removable" in setup_integration.runtime_data["tracker"]
 
     # Remove the entity via the entity registry
     entity_registry = hass.helpers.entity_registry.async_get(hass)
@@ -130,7 +130,7 @@ async def test_entity_removal_cleans_tracked(
         await hass.async_block_till_done()
 
         # After removal, the device should no longer be in the tracked dict
-        assert "removable" not in setup_integration.runtime_data
+        assert "removable" not in setup_integration.runtime_data["tracker"]
 
         # A new dispatch should re-create the entity
         async_dispatcher_send(
