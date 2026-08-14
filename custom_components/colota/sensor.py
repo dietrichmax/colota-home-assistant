@@ -97,7 +97,8 @@ class ColotaBatterySensor(SensorEntity, RestoreEntity):
     @callback
     def update_data(self, battery: float | None) -> None:
         self._attr_native_value = _coerce_battery(battery)
-        self.async_write_ha_state()
+        if self.hass is not None:
+            self.async_write_ha_state()
 
     async def async_added_to_hass(self) -> None:
         await super().async_added_to_hass()

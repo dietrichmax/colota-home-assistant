@@ -132,7 +132,8 @@ class ColotaEntity(TrackerEntity, RestoreEntity):
         self._battery = battery
         self._attr_location_accuracy = accuracy
         self._attr_extra_state_attributes.update(attributes)
-        self.async_write_ha_state()
+        if self.hass is not None:
+            self.async_write_ha_state()
 
     async def async_added_to_hass(self) -> None:
         """Restore state if available."""
