@@ -1,0 +1,26 @@
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+
+integration:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "custom_components/**"
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "README.md"
+
+translations:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "custom_components/colota/strings.json"
+          - "custom_components/colota/translations/**"
+
+config:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "hacs.json"
+          - "custom_components/colota/manifest.json"
