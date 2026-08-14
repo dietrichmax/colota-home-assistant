@@ -1,19 +1,23 @@
 # Colota Home Assistant Integration
 
+[![HACS Default](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/default)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
+
 A [Home Assistant](https://www.home-assistant.io/) custom integration for [Colota](https://github.com/dietrichmax/colota) GPS tracking.
 
-Receives location updates from the Colota mobile app via webhook and creates `device_tracker` entities in Home Assistant.
+Receives location updates from the Colota mobile app via webhook and creates `device_tracker`, `sensor` and `binary_sensor` entities in Home Assistant.
 
 ## Installation
 
 ### HACS (recommended)
 
+Colota is in the HACS default store, so no custom repository is needed.
+
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=dietrichmax&repository=colota-home-assistant&category=integration)
+
 1. Open HACS in Home Assistant
-2. Go to **Integrations**
-3. Click the three dots menu and select **Custom repositories**
-4. Add `https://github.com/dietrichmax/colota-home-assistant` as an **Integration**
-5. Search for "Colota" and install it
-6. Restart Home Assistant
+2. Search for "Colota" and install it
+3. Restart Home Assistant
 
 ### Manual
 
@@ -30,7 +34,15 @@ Receives location updates from the Colota mobile app via webhook and creates `de
 6. Paste the webhook URL as the endpoint
 7. No authentication is needed - the webhook URL acts as the secret
 
-Your device will appear as a `device_tracker` entity that you can use for automations, zones and the map.
+## Entities
+
+Each device creates three entities:
+
+| Entity | Description |
+| --- | --- |
+| `device_tracker` | Location, for automations, zones and the map |
+| `sensor` | Battery level in percent, from the `batt` field |
+| `binary_sensor` | Charging state, from the `bs` field |
 
 ## Payload
 
@@ -44,13 +56,16 @@ The integration accepts Colota's default payload format:
   "alt": 20,
   "vel": 1.5,
   "batt": 85,
+  "bs": 2,
   "bear": 180,
   "tid": "phone",
   "tst": 1704067200
 }
 ```
 
-It also accepts long-form field names (`latitude`, `longitude`, `accuracy`, `altitude`, `speed`, `battery`, `bearing`, `device`).
+`bs` is the battery status: `0` unknown, `1` discharging, `2` charging, `3` full. The charging sensor is on for both `2` and `3`, so it stays on while the device is plugged in at 100%.
+
+It also accepts long-form field names (`latitude`, `longitude`, `accuracy`, `altitude`, `speed`, `battery`, `battery_status`, `bearing`, `device`, `timestamp`).
 
 ## License
 
