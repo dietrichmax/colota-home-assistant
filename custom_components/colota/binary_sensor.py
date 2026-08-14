@@ -100,7 +100,8 @@ class ColotaChargingSensor(BinarySensorEntity, RestoreEntity):
     @callback
     def update_data(self, status: int | None) -> None:
         self._attr_is_on = _coerce_charging(status)
-        self.async_write_ha_state()
+        if self.hass is not None:
+            self.async_write_ha_state()
 
     async def async_added_to_hass(self) -> None:
         await super().async_added_to_hass()
