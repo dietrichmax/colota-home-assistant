@@ -7,7 +7,7 @@
       "webhook_not_internet_accessible": "Sua instancia do Home Assistant precisa estar acessivel pela internet para receber mensagens do webhook."
     },
     "create_entry": {
-      "default": "Para enviar atualizacoes de localizacao do Colota para o Home Assistant, defina o endpoint no aplicativo Colota (Configuracoes > Configuracoes de API) como:\n\n`{webhook_url}`\n\nNenhuma autenticacao necessaria. Para a melhor experiencia, selecione o modelo Home Assistant.\n\nConsulte a documentacao em {docs_url} para mais detalhes."
+      "default": "Para enviar atualizacoes de localizacao do Colota para o Home Assistant, defina o endpoint no aplicativo Colota (Settings > Connection) como:\n\n`{webhook_url}`\n\nNenhuma autenticacao necessaria.\n\nConsulte a documentacao em {docs_url} para mais detalhes."
     },
     "step": {
       "reconfigure": {

@@ -29,10 +29,9 @@ Colota is in the HACS default store, so no custom repository is needed.
 1. In Home Assistant, go to **Settings > Devices & Services > Add Integration**
 2. Search for **Colota** and add it
 3. Copy the webhook URL shown after setup
-4. In the Colota mobile app, go to **Settings > API Settings**
-5. Select the **Home Assistant** template
-6. Paste the webhook URL as the endpoint
-7. No authentication is needed - the webhook URL acts as the secret
+4. In the Colota mobile app, go to **Settings > Connection**
+5. Paste the webhook URL as the **Server endpoint**
+6. No authentication is needed - the webhook URL acts as the secret
 
 ## Entities
 

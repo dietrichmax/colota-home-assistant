@@ -7,7 +7,7 @@
       "webhook_not_internet_accessible": "Je Home Assistant-instantie moet bereikbaar zijn via het internet om webhook-berichten te ontvangen."
     },
     "create_entry": {
-      "default": "Om locatie-updates van Colota naar Home Assistant te sturen, stel het endpoint in de Colota-app (Instellingen > API-instellingen) in op:\n\n`{webhook_url}`\n\nGeen authenticatie nodig. Selecteer het Home Assistant-sjabloon voor de beste ervaring.\n\nZie de documentatie op {docs_url} voor meer informatie."
+      "default": "Om locatie-updates van Colota naar Home Assistant te sturen, stel het endpoint in de Colota-app (Settings > Connection) in op:\n\n`{webhook_url}`\n\nGeen authenticatie nodig.\n\nZie de documentatie op {docs_url} voor meer informatie."
     },
     "step": {
       "reconfigure": {
