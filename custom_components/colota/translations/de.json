@@ -7,7 +7,7 @@
       "webhook_not_internet_accessible": "Deine Home-Assistant-Instanz muss aus dem Internet erreichbar sein, um Webhook-Nachrichten zu empfangen."
     },
     "create_entry": {
-      "default": "Um Standortdaten von Colota an Home Assistant zu senden, setze den Endpunkt in der Colota-App (Einstellungen > API-Einstellungen) auf:\n\n`{webhook_url}`\n\nKeine Authentifizierung erforderlich. Wähle die Home-Assistant-Vorlage für die beste Erfahrung.\n\nWeitere Informationen unter {docs_url}."
+      "default": "Um Standortdaten von Colota an Home Assistant zu senden, setze den Endpunkt in der Colota-App (Settings > Connection) auf:\n\n`{webhook_url}`\n\nKeine Authentifizierung erforderlich.\n\nWeitere Informationen unter {docs_url}."
     },
     "step": {
       "reconfigure": {
