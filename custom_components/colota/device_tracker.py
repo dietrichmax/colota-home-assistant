@@ -7,7 +7,6 @@ from typing import Any
 
 from homeassistant.components.device_tracker import TrackerEntity
 from homeassistant.const import (
-    ATTR_BATTERY_LEVEL,
     ATTR_GPS_ACCURACY,
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
@@ -50,11 +49,11 @@ async def async_setup_entry(
     ) -> None:
         """Receive location data from dispatcher."""
         if device in tracked:
-            tracked[device].update_data(gps, battery, accuracy, attrs)
+            tracked[device].update_data(gps, accuracy, attrs)
             return
 
         _LOGGER.debug("Registering new Colota device: %s", device)
-        entity = ColotaEntity(device, gps, battery, accuracy, attrs, tracked)
+        entity = ColotaEntity(device, gps, accuracy, attrs, tracked)
         tracked[device] = entity
         async_add_entities([entity])
 
@@ -66,7 +65,7 @@ async def async_setup_entry(
     dev_reg = dr.async_get(hass)
     dev_ids = {
         identifier[1]
-        for device in dev_reg.devices.get_devices_for_config_entry_id(entry.entry_id)
+        for device in dr.async_entries_for_config_entry(dev_reg, entry.entry_id)
         for identifier in device.identifiers
     }
     if not dev_ids:
@@ -74,7 +73,7 @@ async def async_setup_entry(
 
     entities = []
     for dev_id in dev_ids:
-        entity = ColotaEntity(dev_id, None, None, None, None, tracked)
+        entity = ColotaEntity(dev_id, None, None, None, tracked)
         tracked[dev_id] = entity
         entities.append(entity)
     async_add_entities(entities)
@@ -90,7 +89,6 @@ class ColotaEntity(TrackerEntity, RestoreEntity):
         self,
         device: str,
         location: tuple[float, float] | None,
-        battery: float | None,
         accuracy: float | None,
         attributes: dict[str, Any] | None,
         tracked: dict[str, ColotaEntity],
@@ -101,7 +99,6 @@ class ColotaEntity(TrackerEntity, RestoreEntity):
         self._attr_unique_id = device
         self._attr_location_accuracy = accuracy or 0
         self._attr_extra_state_attributes = attributes or {}
-        self._battery = battery
         if location:
             self._attr_latitude = location[0]
             self._attr_longitude = location[1]
@@ -111,25 +108,16 @@ class ColotaEntity(TrackerEntity, RestoreEntity):
             manufacturer="Colota",
         )
 
-    @property
-    def battery_level(self) -> int | None:
-        """Return battery value of the device."""
-        if self._battery is None or self._battery < 0:
-            return None
-        return int(self._battery)
-
     @callback
     def update_data(
         self,
         location: tuple[float, float],
-        battery: float,
         accuracy: float,
         attributes: dict[str, Any],
     ) -> None:
         """Update entity with new data from webhook."""
         self._attr_latitude = location[0]
         self._attr_longitude = location[1]
-        self._battery = battery
         self._attr_location_accuracy = accuracy
         self._attr_extra_state_attributes.update(attributes)
         if self.hass is not None:
@@ -154,7 +142,6 @@ class ColotaEntity(TrackerEntity, RestoreEntity):
                 ATTR_BATTERY_STATUS: None,
                 ATTR_TIMESTAMP: None,
             }
-            self._battery = None
             return
 
         attr = state.attributes
@@ -168,7 +155,6 @@ class ColotaEntity(TrackerEntity, RestoreEntity):
             ATTR_BATTERY_STATUS: attr.get(ATTR_BATTERY_STATUS),
             ATTR_TIMESTAMP: attr.get(ATTR_TIMESTAMP),
         }
-        self._battery = attr.get(ATTR_BATTERY_LEVEL)
 
     async def async_will_remove_from_hass(self) -> None:
         """Clean up tracked reference so the device can be re-registered."""
