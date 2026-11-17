@@ -66,6 +66,33 @@ The integration accepts Colota's default payload format:
 
 It also accepts long-form field names (`latitude`, `longitude`, `accuracy`, `altitude`, `speed`, `battery`, `battery_status`, `bearing`, `device`, `timestamp`).
 
+## Geofence events
+
+With **Send enter and leave events** turned on, Colota also posts an event each time the phone enters or leaves one of its geofences. The integration fires these on the event bus as `colota_geofence` and leaves the device tracker alone, which keeps following the location points. Zones keep working as before.
+
+| Field | Value |
+| --- | --- |
+| `device` | Device ID, the same one the tracker uses |
+| `event` | `enter` or `leave` |
+| `geofence` | Name of the geofence in Colota |
+| `timestamp` | Unix time of the fix the event happened at |
+
+Colota counts a geofence as left only after two fixes in a row lie outside its radius plus their accuracy, so a trigger on this event fires less often on GPS jitter than one on zone state. It also works for geofences that don't exist as zones in Home Assistant.
+
+```yaml
+triggers:
+  - trigger: event
+    event_type: colota_geofence
+    event_data:
+      device: phone
+      event: leave
+      geofence: Home
+actions:
+  - action: notify.notify
+    data:
+      message: "Left Home"
+```
+
 ## License
 
 AGPL-3.0 - see [LICENSE](LICENSE) for details.
