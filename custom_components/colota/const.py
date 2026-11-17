@@ -9,3 +9,5 @@ ATTR_BEARING = "bearing"
 ATTR_DEVICE = "device"
 ATTR_SPEED = "speed"
 ATTR_TIMESTAMP = "timestamp"
+
+EVENT_GEOFENCE = f"{DOMAIN}_geofence"

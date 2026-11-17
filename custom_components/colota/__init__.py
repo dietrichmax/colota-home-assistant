@@ -31,6 +31,7 @@ from .const import (
     ATTR_SPEED,
     ATTR_TIMESTAMP,
     DOMAIN,
+    EVENT_GEOFENCE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -61,6 +62,16 @@ WEBHOOK_SCHEMA = vol.Schema(
         vol.Optional(ATTR_BATTERY_STATUS): vol.Coerce(int),
         vol.Optional(ATTR_BEARING): vol.Coerce(float),
         vol.Optional(ATTR_SPEED): vol.Coerce(float),
+        vol.Optional(ATTR_TIMESTAMP): vol.Coerce(int),
+    },
+    extra=vol.REMOVE_EXTRA,
+)
+
+GEOFENCE_SCHEMA = vol.Schema(
+    {
+        vol.Optional(ATTR_DEVICE, default="colota"): _id,
+        vol.Required("event"): vol.In(["enter", "leave"]),
+        vol.Required("desc"): cv.string,
         vol.Optional(ATTR_TIMESTAMP): vol.Coerce(int),
     },
     extra=vol.REMOVE_EXTRA,
@@ -105,6 +116,28 @@ async def handle_webhook(
                 text="Could not parse request body",
                 status=HTTPStatus.BAD_REQUEST,
             )
+
+    # A leave carries an older fix than the point before it, so events never move the tracker.
+    if isinstance(raw, dict) and raw.get("_type") == "transition":
+        try:
+            event = GEOFENCE_SCHEMA(_normalize_payload(raw))
+        except vol.MultipleInvalid as error:
+            # Colota resends a refused event on every sync pass, and a malformed one never passes.
+            _LOGGER.warning("Ignoring malformed Colota geofence event: %s", error)
+            return web.Response(text="Ignoring malformed geofence event", status=HTTPStatus.OK)
+        hass.bus.async_fire(
+            EVENT_GEOFENCE,
+            {
+                ATTR_DEVICE: event[ATTR_DEVICE],
+                "event": event["event"],
+                "geofence": event["desc"],
+                ATTR_TIMESTAMP: event.get(ATTR_TIMESTAMP),
+            },
+        )
+        return web.Response(
+            text=f"Geofence {event['event']} for {event[ATTR_DEVICE]}",
+            status=HTTPStatus.OK,
+        )
 
     try:
         data = WEBHOOK_SCHEMA(_normalize_payload(raw))
